@@ -2,9 +2,38 @@
 
 {% block container %}
 
-    <h1>Nouvel article | <a href="{{ path('article') }}" class="btn btn-sm btn-success">Retour aux articles</a></h1>
+    <h1>Créer un article | <a href="{{ path('app_article') }}" class="btn btn-sm btn-success">Retour aux articles</a></h1>
     
     <div class="row">
+
+        {{ form_start(form) }}
+        <div class="col-md-6 mb-3">
+            <div class="form-group">
+                {{ form_widget(form.title) }}
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <div class="form-group">
+                {{ form_widget(form.content) }}
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <div class="form-group">
+                {{ form_widget(form.author) }}
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <div class="form-group">
+                {{ form_widget(form.publication_date, {'attr': {'class': 'form-control'}}) }}
+            </div>
+        </div>
+
+        <button class="btn btn-primary" type="submit">Valider l'article</button>
+
+        {{ form_end(form) }}
 
     </div>
     

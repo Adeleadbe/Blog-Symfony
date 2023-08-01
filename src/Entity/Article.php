@@ -17,13 +17,13 @@ class Article
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
-    #[ORM\Column(length: 700)]
+    #[ORM\Column(type:"text", nullable:true)]
     private ?string $content = null;
 
     #[ORM\Column(length: 255)]
     private ?string $author = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type:'date')]
     private ?\DateTimeInterface $publication_date = null;
 
     public function getId(): ?int
