@@ -2,7 +2,11 @@
 
 {% block container %}
 
-    <h3>(titre de l'article choisi)</h3>
+    <h1>Nom</h1>
     <hr>
-    
+
+    <p>{{ article.content }}</p>
+
+    <a href="{{ path('app_article') }}" class="btn btn-sm btn-primary">Retour aux articles</a>
+
 {% endblock %}
