@@ -1,0 +1,30 @@
+{% extends "base.html.twig" %} 
+
+{% block container %}
+
+    <h1>Modifier un article</h1>
+
+    {{ form_start(form) }}
+    <div class="col-md-6 mb-3">
+        <div class="form-group">
+            {{ form_widget(form.title) }}
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <div class="form-group">
+            {{ form_widget(form.content) }}
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <div class="form-group">
+            {{ form_widget(form.author) }}
+        </div>
+    </div>
+
+    <button class="btn btn-primary" type="submit">Valider l'article</button>
+
+    {{ form_end(form) }}
+
+{% endblock %}

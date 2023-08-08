@@ -23,9 +23,6 @@ class Article
     #[ORM\Column(length: 255)]
     private ?string $author = null;
 
-    #[ORM\Column(type:'date')]
-    private ?\DateTimeInterface $publication_date = null;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -63,18 +60,6 @@ class Article
     public function setAuthor(string $author): static
     {
         $this->author = $author;
-
-        return $this;
-    }
-
-    public function getPublicationDate(): ?\DateTimeInterface
-    {
-        return $this->publication_date;
-    }
-
-    public function setPublicationDate(\DateTimeInterface $publication_date): static
-    {
-        $this->publication_date = $publication_date;
 
         return $this;
     }

@@ -29,7 +29,6 @@ class ArticleType extends AbstractType
                     'class' => 'form-control', 
                     'placeholder' => 'Auteur de l\'article']
             ])
-            ->add('publication_date', null)
         ;
     }
 

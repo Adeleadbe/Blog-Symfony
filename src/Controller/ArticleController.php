@@ -57,4 +57,47 @@ class ArticleController extends AbstractController
             'article' => $article
         ]);
     }
+
+    #[Route('/article/edit/{id}', name: 'article_edit')]
+    public function edit(Request $request, int $id, EntityManagerInterface $entityManager){
+        
+        $article = $entityManager->getRepository(Article::class)->find($id);
+
+        if (!$article) {
+            throw $this->createNotFoundException('Article non trouvé');
+        }
+
+        $form = $this->createForm(ArticleType::class, $article);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            $updatedArticle = $entityManager->getRepository(Article::class)->find($id);
+
+            return $this->redirectToRoute('app_article', [
+                'article' => $updatedArticle,
+            ]);
+        }
+
+        return $this->render('articles/new.html.twig', [
+            'form' => $form->createView(),
+            'article' => $article,
+        ]);
+    }
+
+    #[Route('/article/delete/{id}', name: 'article_delete')]
+    public function delete(int $id, EntityManagerInterface $entityManager){
+        
+        $article = $entityManager->getRepository(Article::class)->find($id);
+
+        if (!$article) {
+            throw $this->createNotFoundException('Article non trouvé');
+        }
+
+        $entityManager->remove($article);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_article');
+    }
 }
