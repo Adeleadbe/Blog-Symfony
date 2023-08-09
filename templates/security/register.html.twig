@@ -1,0 +1,42 @@
+{% extends "base.html.twig" %}
+
+{% block container %}
+
+<h3>Inscription</h3>
+<hr>
+
+<div class="row">
+    <div class="col-lg-2 col-md-2"></div>
+    
+    <div class="col-lg-8 col-md-8">
+
+        <div class="alert alert-success" role="alert">
+            A simple success alert—check it out!
+        </div>
+
+        <div class="alert alert-danger" role="alert">
+            A simple danger alert—check it out!
+        </div>
+
+        <form>
+            <div class="mb-3">
+                <label for="inputEmail" class="form-label">Adresse email</label>
+                <input type="email" class="form-control" id="inputEmail" placeholder="Indiquez votre adresse email" />
+            </div>
+            <div class="mb-3">
+                <label for="inputPseudo" class="form-label">Pseudonyme</label>
+                <input type="text" class="form-control" id="inputPseudo" placeholder="Indiquez un pseudonyme" />
+            </div>
+            <div class="mb-3">
+                <label for="inputPassword" class="form-label">Mot de passe</label>
+                <input type="password" class="form-control" id="inputPassword" placeholder="Indiquez votre mot de passe" />
+            </div>
+            <div class="mb-3">
+                <label for="inputPasswordConfirm" class="form-label">Confirmation du mot de passe</label>
+                <input type="password" class="form-control" id="inputPasswordConfirm" placeholder="Confirmez votre mot de passe" />
+            </div>
+            <button type="submit" class="btn btn-primary">S'inscrire</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

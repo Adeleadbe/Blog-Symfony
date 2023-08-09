@@ -1,0 +1,32 @@
+{% extends "base.html.twig" %} 
+
+{% block container %}
+
+<h3>Connexion</h3>
+<hr>
+
+<div class="row">
+    <div class="col-lg-2 col-md-2"></div>
+    
+    <div class="col-lg-8 col-md-8">
+
+        {% if error %}
+            <div class="alert alert-danger" role="alert">
+                {{ error.messageKey }}
+            </div>
+        {% endif %}
+
+        <form action="{{ path('app_security_login') }}" method="post">
+            <div class="mb-3">
+                <label for="inputEmail" class="form-label">Adresse email</label>
+                <input type="email" name="_username" value="{{ lastUsername }}" class="form-control" id="inputEmail" placeholder="Indiquez votre adresse email" />
+            </div>
+            <div class="mb-3">
+                <label for="inputPassword" class="form-label">Mot de passe</label>
+                <input type="password" name="_password" class="form-control" id="inputPassword" placeholder="Indiquez votre mot de passe" />
+            </div>
+            <button type="submit" class="btn btn-primary">Se connecter</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
