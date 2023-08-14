@@ -14,6 +14,7 @@ security:
             security: false
         main:
             lazy: true
+            entry_point: App\Controller\Security\CustomAuthenticationEntryPoint
             
             form_login:
                 login_path: app_security_login
@@ -36,7 +37,7 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+         - { path: ^/profile, roles: ROLE_USER }
 
 when@test:
     security:

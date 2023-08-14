@@ -4,10 +4,20 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[UniqueEntity(
+    fields: "email",
+    message: "Cette adresse email existe déjà",
+)]
+#[UniqueEntity(
+    fields: "username",
+    message: "Ce pseudo est déjà utilisé",
+)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -16,13 +26,45 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 255, unique: true)]
+    #[Assert\NotNull(
+        message: "Vous devez indiquer un pseudo valide"
+    )]
+    #[Assert\Length(
+        min: 3,
+        max: 15,
+        minMessage: "Votre peuso est trop court (minimum : 3)",
+        maxMessage: "Votre peuso est trop long (maximum : 15)",
+    )]
+    #[Assert\Regex(
+        pattern: "/@/",
+        match: false,
+        message: "Le pseudonyme indiqué est invalide",
+    )]
     private ?string $username = null;
 
     #[ORM\Column(length: 255, unique: true)]
+    #[Assert\NotNull(
+        message: "Vous devez indiquer un email valide"
+    )]
+    #[Assert\Email(
+        message: "L'email indiqué n'est pas valide"
+    )]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotNull(
+        message: "Veuillez indiquer un mot de passe"
+    )]
     private ?string $password = null;
+
+    #[Assert\NotNull(
+        message: "Vous devez indiquer une confirmation de mot de passe"
+    )]
+    #[Assert\EqualTo(
+        propertyPath: 'password',
+        message: "Vos mots de passe ne sont pas identiques"
+    )]
+    private ?string $passwordConfirm = null;
 
     #[ORM\Column]
     private array $roles = [];
@@ -92,5 +134,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials()
     {
         
+    }
+
+    public function setPasswordConfirm(?string $passwordConfirm): void
+    {
+        $this->passwordConfirm = $passwordConfirm;
+    }
+
+    public function getPasswordConfirm(): ?string 
+    {
+        return $this->passwordConfirm;
     }
 }

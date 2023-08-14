@@ -24,6 +24,9 @@ class UserType extends AbstractType
             ->add('password', PasswordType::class, [
                 'attr' => ['class' => 'form-control', 'placeholder' => 'Veuillez indiquer votre mot de passe']
             ])
+            ->add('passwordConfirm', PasswordType::class, [
+                'attr' => ['class' => 'form-control', 'placeholder' => 'Confirmation de mot de passe']
+            ])
         ;
     }
 

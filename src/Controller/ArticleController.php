@@ -8,13 +8,18 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 #[Route(name: 'app_')]
 class ArticleController extends AbstractController
 {
     #[Route('/article', name: 'article')]
-    public function index(EntityManagerInterface $entityManager)
+    public function index(EntityManagerInterface $entityManager, AuthorizationCheckerInterface $authorizationChecker)
     {
+        if (!$authorizationChecker->isGranted('ROLE_USER')) {
+            throw $this->createAccessDeniedException('Accés refusé.');
+        }
+
         $articles = $entityManager->getRepository(Article::class)->findAll();
         
         return $this->render('articles/index.html.twig', [
@@ -66,6 +71,8 @@ class ArticleController extends AbstractController
         if (!$article) {
             throw $this->createNotFoundException('Article non trouvé');
         }
+
+        if(!$authorizationChecker->isGranted)
 
         $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);

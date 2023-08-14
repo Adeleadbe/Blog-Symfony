@@ -16,6 +16,8 @@
             </div>
         {% endif %}
 
+        {% include 'includes/_alerts.html.twig' %}
+
         <form action="{{ path('app_security_login') }}" method="post">
             <div class="mb-3">
                 <label for="inputEmail" class="form-label">Adresse email</label>

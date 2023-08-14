@@ -27,10 +27,10 @@
                     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                         <div class="navbar-nav">
                             <a class="nav-link {% if app.request.getPathInfo == '/' %}active{% endif %}" aria-current="page" href="{{ path('app_home') }}">Accueil</a>
-                            <a class="nav-link {% if '/article' in app.request.getPathInfo %}active{% endif %}" href="{{ path('app_article') }}">Articles</a>
                             {% if app.user %}
+                                <a class="nav-link {% if '/article' in app.request.getPathInfo %}active{% endif %}" href="{{ path('app_article') }}">Articles</a>
                                 <a class="nav-link" href="{{ path('app_article_new') }}">Nouvel Article</a>
-                                <a class="nav-link" href="#">Se déconnecter</a>
+                                <a class="nav-link" href="{{ path('app_security_logout') }}">Se déconnecter</a>
                             {% else %}
                                 <a class="nav-link {% if '/login' in app.request.getPathInfo %}active{% endif %}" href="{{ path('app_security_login') }}">Connexion</a>
                                 <a class="nav-link {% if '/register' in app.request.getPathInfo %}active{% endif %}" href="{{ path('app_security_register') }}">Inscription</a>
