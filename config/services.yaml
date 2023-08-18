@@ -26,3 +26,5 @@ services:
     App\Controller\Security\CustomAuthenticationEntryPoint:
         arguments:
             $loginRoute: 'app_security_login'
+
+    App\Controller\Security\ArticleVoter: ~

@@ -30,14 +30,15 @@ class ArticleController extends AbstractController
     #[Route('/article/new', name: 'article_new')]
     public function new(Request $request, EntityManagerInterface $manager)
     {
-        //Instanciation d'un nouvel objet Article
-        $article = new Article();
-        //Création du formulaire
-        $form = $this->createForm(ArticleType::class, $article);
-        //Traitement du formulaire soumis
+        // Création du formulaire
+        $form = $this->createForm(ArticleType::class);
+        // Traitement du formulaire soumis
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
+            $article = $form->getData();
+            $article->setAuthor($this->getUser()); // Set the user as the author
+            
             $manager->persist($article);
             $manager->flush();
 
@@ -64,7 +65,7 @@ class ArticleController extends AbstractController
     }
 
     #[Route('/article/edit/{id}', name: 'article_edit')]
-    public function edit(Request $request, int $id, EntityManagerInterface $entityManager){
+    public function edit(Request $request, int $id, EntityManagerInterface $entityManager, AuthorizationCheckerInterface $authorizationChecker){
         
         $article = $entityManager->getRepository(Article::class)->find($id);
 
@@ -72,7 +73,9 @@ class ArticleController extends AbstractController
             throw $this->createNotFoundException('Article non trouvé');
         }
 
-        if(!$authorizationChecker->isGranted)
+        if(!$authorizationChecker->isGranted('edit', $article)) {
+            throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à modifier cet article');
+        }
 
         $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
@@ -80,26 +83,31 @@ class ArticleController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            $updatedArticle = $entityManager->getRepository(Article::class)->find($id);
-
-            return $this->redirectToRoute('app_article', [
-                'article' => $updatedArticle,
-            ]);
+            return $this->redirectToRoute('app_article');
         }
 
-        return $this->render('articles/new.html.twig', [
+        return $this->render('articles/edit.html.twig', [
             'form' => $form->createView(),
             'article' => $article,
         ]);
     }
 
     #[Route('/article/delete/{id}', name: 'article_delete')]
-    public function delete(int $id, EntityManagerInterface $entityManager){
+    public function delete(int $id, EntityManagerInterface $entityManager, AuthorizationCheckerInterface $authorizationChecker){
         
         $article = $entityManager->getRepository(Article::class)->find($id);
 
         if (!$article) {
             throw $this->createNotFoundException('Article non trouvé');
+        }
+
+        if(!$authorizationChecker->isGranted('delete', $article)) {
+            throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à supprimer cet article');
+        }
+
+        // Vérification de l'auteur de l'article
+        if ($article->getAuthor() !== $this->getUser()) {
+            throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à supprimer cet article');
         }
 
         $entityManager->remove($article);

@@ -24,11 +24,6 @@ class ArticleType extends AbstractType
                     'rows' => 8,
                     'placeholder' => 'Contenu de l\'article']
             ])
-            ->add('author', null, [
-                'attr' => [
-                    'class' => 'form-control', 
-                    'placeholder' => 'Auteur de l\'article']
-            ])
         ;
     }
 

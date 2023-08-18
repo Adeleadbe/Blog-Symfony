@@ -27,6 +27,8 @@ security:
                 path: app_security_logout
                 target: app_home
 
+    access_decision_manager:
+        strategy: unanimous
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
 
@@ -38,6 +40,8 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
          - { path: ^/profile, roles: ROLE_USER }
+         - { path: ^/edit, roles: ROLE_USER }
+         - { path: ^/delete, roles: ROLE_USER }
 
 when@test:
     security:
