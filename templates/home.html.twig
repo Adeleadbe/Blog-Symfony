@@ -3,7 +3,13 @@
 {% block container %}
 
     <h3>Accueil</h3>
-    <h4>Bonjour {{ app.user.username }}</h4>
+
+    {% if app.user %}
+        <h4>Bonjour {{ app.user.username }}</h4>
+    {% else %}
+        <h4>Bonjour</h4>
+    {% endif %}
+
     <p>Retrouvez les dernières recettes mises en ligne</p>
     <hr>
     

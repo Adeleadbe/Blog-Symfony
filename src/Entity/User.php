@@ -130,10 +130,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return (string) $this->email;
     }
-    
+
     public function eraseCredentials()
     {
-        
     }
 
     public function setPasswordConfirm(?string $passwordConfirm): void
@@ -141,7 +140,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->passwordConfirm = $passwordConfirm;
     }
 
-    public function getPasswordConfirm(): ?string 
+    public function getPasswordConfirm(): ?string
     {
         return $this->passwordConfirm;
     }

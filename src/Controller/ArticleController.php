@@ -7,6 +7,7 @@ use App\Form\ArticleType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
@@ -14,31 +15,31 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 class ArticleController extends AbstractController
 {
     #[Route('/article', name: 'article')]
-    public function index(EntityManagerInterface $entityManager, AuthorizationCheckerInterface $authorizationChecker)
+    public function index(EntityManagerInterface $entityManager, AuthorizationCheckerInterface $authorizationChecker): Response
     {
         if (!$authorizationChecker->isGranted('ROLE_USER')) {
             throw $this->createAccessDeniedException('Accés refusé.');
         }
 
         $articles = $entityManager->getRepository(Article::class)->findAll();
-        
+
         return $this->render('articles/index.html.twig', [
             'articles' => $articles
         ]);
     }
 
     #[Route('/article/new', name: 'article_new')]
-    public function new(Request $request, EntityManagerInterface $manager)
+    public function new(Request $request, EntityManagerInterface $manager): Response
     {
         // Création du formulaire
         $form = $this->createForm(ArticleType::class);
         // Traitement du formulaire soumis
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid()) {
             $article = $form->getData();
             $article->setAuthor($this->getUser()); // Set the user as the author
-            
+
             $manager->persist($article);
             $manager->flush();
 
@@ -47,15 +48,15 @@ class ArticleController extends AbstractController
 
         return $this->render('articles/new.html.twig', [
             'form' => $form->createView(),
-        ]); 
+        ]);
     }
 
     #[Route('/article/{id}', name: 'article_show')]
-    public function show($id, EntityManagerInterface $entityManager)
+    public function show(int $id, EntityManagerInterface $entityManager): Response
     {
         $article = $entityManager->getRepository(Article::class)->findOneBy(['id' => $id]);
 
-        if(is_null($article)){
+        if (is_null($article)) {
             return $this->redirectToRoute('app_article');
         }
 
@@ -65,15 +66,15 @@ class ArticleController extends AbstractController
     }
 
     #[Route('/article/edit/{id}', name: 'article_edit')]
-    public function edit(Request $request, int $id, EntityManagerInterface $entityManager, AuthorizationCheckerInterface $authorizationChecker){
-        
+    public function edit(Request $request, int $id, EntityManagerInterface $entityManager, AuthorizationCheckerInterface $authorizationChecker): Response
+    {
         $article = $entityManager->getRepository(Article::class)->find($id);
 
         if (!$article) {
             throw $this->createNotFoundException('Article non trouvé');
         }
 
-        if(!$authorizationChecker->isGranted('edit', $article)) {
+        if (!$authorizationChecker->isGranted('edit', $article)) {
             throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à modifier cet article');
         }
 
@@ -93,15 +94,15 @@ class ArticleController extends AbstractController
     }
 
     #[Route('/article/delete/{id}', name: 'article_delete')]
-    public function delete(int $id, EntityManagerInterface $entityManager, AuthorizationCheckerInterface $authorizationChecker){
-        
+    public function delete(int $id, EntityManagerInterface $entityManager, AuthorizationCheckerInterface $authorizationChecker): Response
+    {
         $article = $entityManager->getRepository(Article::class)->find($id);
 
         if (!$article) {
             throw $this->createNotFoundException('Article non trouvé');
         }
 
-        if(!$authorizationChecker->isGranted('delete', $article)) {
+        if (!$authorizationChecker->isGranted('delete', $article)) {
             throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à supprimer cet article');
         }
 
